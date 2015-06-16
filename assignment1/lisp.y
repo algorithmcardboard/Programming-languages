@@ -1,6 +1,8 @@
 %{
 #include <iostream>
 
+using namespace std;
+
 int yylex(); // A function that is to be generated and provided by flex,
              // which returns a next token when called repeatedly.
 int yyerror(const char *p) { std::cerr << "error: " << p << std::endl; };
@@ -14,21 +16,30 @@ int yyerror(const char *p) { std::cerr << "error: " << p << std::endl; };
 
 %start prog
 
+%token LPAREN RPAREN
 %token PLUS MINUS MUL DIV
 %token <val> NUM    /* 'val' is the (only) field declared in %union
                        which represents the type of the token. */
 
-%type <val> expr
+%type <val> expr term factor
 
 %%
 
 prog : expr                             { std::cout << $1 << std::endl; }
      ;
 
-expr : PLUS NUM expr                     { std::cout << "$2 is " << $2 << " $3 is " << $3 << std::endl; $$ = $2 + $3; }
-     | PLUS NUM NUM                      { std::cout << "matching second rule " << std::endl; $$ = $2 + $3; }
-     | NUM expr                          { std::cout << "matching third rule " << std::endl; $$ = $1 + $2; }
-     | NUM NUM                           { std::cout << "matching fourth rule " << std::endl; $$ = $1 + $2; }
+expr : term                             /* default action: { $$ = $1; } */
+     ;
+
+term : PLUS term term                  { cout << "matching 1" << endl; $$ = $2 + $3; }
+     | MINUS term term                 { cout << "matching 2" << endl; $$ = $2 - $3; }
+     | MUL term term                   { cout << "matching 2" << endl; $$ = $2 * $3; }
+     | DIV term term                   { cout << "matching 2" << endl; $$ = $2 / $3; }
+     | factor
+     ;
+
+factor : NUM                            /* default action: { $$ = $1; } */
+       ;
 
 %%
 
