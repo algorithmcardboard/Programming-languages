@@ -18,22 +18,17 @@ int yyerror(const char *p) { std::cerr << "error: " << p << std::endl; };
 %token <val> NUM    /* 'val' is the (only) field declared in %union
                        which represents the type of the token. */
 
-%type <val> expr factor intList
+%type <val> expr
 
 %%
 
 prog : expr                             { std::cout << $1 << std::endl; }
      ;
 
-expr : MUL intList                         { std::cout << $2; }
-     | factor                           /* default action: { $$ = $1; } */
-     ;
-
-intList : intList factor
-        | factor factor                   { $$ = 5; }
-
-factor : NUM                            /* default action: { $$ = $1; } */
-       ;
+expr : PLUS NUM expr                     { std::cout << "$2 is " << $2 << " $3 is " << $3 << std::endl; $$ = $2 + $3; }
+     | PLUS NUM NUM                      { std::cout << "matching second rule " << std::endl; $$ = $2 + $3; }
+     | NUM expr                          { std::cout << "matching third rule " << std::endl; $$ = $1 + $2; }
+     | NUM NUM                           { std::cout << "matching fourth rule " << std::endl; $$ = $1 + $2; }
 
 %%
 
