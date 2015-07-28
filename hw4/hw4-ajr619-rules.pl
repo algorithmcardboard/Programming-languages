@@ -27,6 +27,8 @@ tweet(@tony, t5, [tony, first, tweet]).
 tweet(@tony, t6, [tony, second, tweet]).
 tweet(@narasimman, t7, [narasimman, first, tweet]).
 tweet(@narasimman, t8, [narasimman, second, tweet]).
+tweet(@vivek, t9, [@narasimman, direct, message]).
+tweet(@shan, t10, [@narasimman, second, direct, message]).
 
 
 %% queestion 4
@@ -64,4 +66,7 @@ search(K, U, M) :- tweet(U, _, M), memberchk(K, M).
 
 %%queries
 numretweets(I, Length) :- findall(I, retweet(_, I), B), length(B, Length).
+
+%% direct message
+show_inbox(U, M) :- tweet(_, _, M), nth0(0, M, U).
 
