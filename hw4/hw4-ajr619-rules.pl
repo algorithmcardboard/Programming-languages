@@ -19,14 +19,14 @@ follows(@narasimman, @vivek).
 
 %% queestion 3
 %% creating tweets for users
-tweet(@anirudhan, t1, [Anirudhan, First, tweet]).
-tweet(@anirudhan, t2, [Anirudhan, Second, tweet]).
-tweet(@anirudhan, t3, [Anirudhan, Third, tweet]).
-tweet(@anirudhan, t4, [Anirudhan, Fourth, tweet]).
-tweet(@tony, t5, [Tony, first, tweet]).
-tweet(@tony, t6, [Tony, Second, tweet]).
-tweet(@narasimman, t7, [Narasimman, first, tweet]).
-tweet(@narasimman, t8, [Narasimman, Second, tweet]).
+tweet(@anirudhan, t1, [anirudhan, first, tweet]).
+tweet(@anirudhan, t2, [anirudhan, second, tweet]).
+tweet(@anirudhan, t3, [anirudhan, third, tweet]).
+tweet(@anirudhan, t4, [anirudhan, fourth, tweet]).
+tweet(@tony, t5, [tony, first, tweet]).
+tweet(@tony, t6, [tony, second, tweet]).
+tweet(@narasimman, t7, [narasimman, first, tweet]).
+tweet(@narasimman, t8, [narasimman, second, tweet]).
 
 
 %% queestion 4
@@ -49,7 +49,7 @@ remove_ident([[_|Y]|T1],[H2|T2]) :- Y=H2,remove_ident(T1,T2).
 %% search
 %% question 6
 
-does_match(K, []) :- fail.
+does_match(_, []) :- fail.
 does_match(K, [Head | Tail]) :- K == Head, !, does_match(K, Tail).
 search(K, U, M) :- tweet(U, _, M), does_match(K, M).
 
