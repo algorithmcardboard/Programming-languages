@@ -6,6 +6,7 @@ user(@narasimman).
 user(@vivek).
 user(@shan).
 user(@shu).
+user(@gopi).
 
 
 %% queestion 2
@@ -13,8 +14,11 @@ user(@shu).
 follows(@tony, @anirudhan).
 follows(@shan, @anirudhan).
 follows(@shu, @anirudhan).
+follows(@vivek, @shu).
 follows(@anirudhan, @narasimman).
 follows(@narasimman, @vivek).
+follows(@gopi, @tony).
+follows(@shu, @gopi).
 
 
 %% queestion 3
@@ -29,6 +33,7 @@ tweet(@narasimman, t7, [narasimman, first, tweet]).
 tweet(@narasimman, t8, [narasimman, second, tweet]).
 tweet(@vivek, t9, [@narasimman, direct, message]).
 tweet(@shan, t10, [@narasimman, second, direct, message]).
+tweet(@anirudhan, t11, [anirudhan, redireciton, test]).
 
 
 %% queestion 4
@@ -40,6 +45,10 @@ retweet(@shan, t1).
 retweet(@narasimman, t5).
 retweet(@narasimman, t1).
 retweet(@shan, t2).
+retweet(@shu, t2).
+retweet(@tony, t11).
+retweet(@gopi, t11).
+retweet(@shu, t11).
 
 %% queestion 5
 %% The feedhelper function.  Returns tweets and retweeets for the users followers
@@ -57,12 +66,16 @@ feed(U,M) :- uniquefeed(U,O),remove_ident(O,M).
 
 search(K, U, M) :- tweet(U, _, M), memberchk(K, M).
 
-%% isViral (S, I, R)
+%% isviral (S, I, R)
 %% question 7
 %% S = Un, R =  U1, I = Id.
+isviral(S, I, R) :- tweet(S, I, _), follows(R, S).
+isviral(S, I, R) :- retweet(User, I), follows(R, User), isviral(S, I, User).
 
-%% isViral (S, I, R, M)
+%% isviral (S, I, R, M)
 %% question 8
+isviral(S, I, R, M) :- tweet(S, I, _), follows(R, S), M =< 1.
+isviral(S, I, R, M) :- retweet(User, I), follows(R, User), N is M-1, isviral(S, I, User, N).
 
 %%queries
 numretweets(I, Length) :- findall(I, retweet(_, I), B), length(B, Length).
